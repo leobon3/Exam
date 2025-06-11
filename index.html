@@ -28,7 +28,7 @@
             color: var(--dark);
             line-height: 1.6;
             min-height: 100vh;
-            padding: 80px 20px 20px; /* Added top padding for fixed header */
+            padding: 80px 20px 20px;
         }
         
         .container {
@@ -50,14 +50,13 @@
             display: block;
         }
         
-        /* Fixed Header Styles */
         header {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             background: white;
-            padding: 15px 20px;
+            padding: 10px 20px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             z-index: 1000;
             display: flex;
@@ -70,14 +69,30 @@
             font-size: 20px;
             margin: 0;
             font-weight: 600;
+            flex: 1;
         }
         
         .header-controls {
             display: flex;
             gap: 10px;
+            align-items: center;
         }
         
-        #homeBtn, #stopRecordingHeaderBtn {
+        .header-timer {
+            display: none;
+            background-color: rgba(67, 97, 238, 0.1);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .header-timer span {
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        #homeBtn, #stopRecordingHeaderBtn, #downloadHeaderBtn {
             display: none;
             align-items: center;
             padding: 8px 12px;
@@ -107,13 +122,21 @@
             background-color: rgba(247, 37, 133, 0.2);
         }
         
+        #downloadHeaderBtn {
+            background-color: rgba(76, 201, 240, 0.1);
+            color: var(--success);
+        }
+        
+        #downloadHeaderBtn:hover {
+            background-color: rgba(76, 201, 240, 0.2);
+        }
+        
         .icon {
             width: 16px;
             height: 16px;
             margin-right: 6px;
         }
         
-        /* Rest of your existing styles... */
         h1 {
             font-size: 28px;
             font-weight: 600;
@@ -149,23 +172,6 @@
             transform: translateY(-2px);
         }
         
-        .btn-danger {
-            background-color: var(--secondary);
-            color: white;
-        }
-        
-        .btn-danger:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-        }
-        
-        .btn:disabled {
-            background-color: #e9ecef;
-            color: #adb5bd;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
         .input-group {
             margin-bottom: 24px;
         }
@@ -199,6 +205,8 @@
             border-left: 4px solid var(--primary);
             font-size: 18px;
             line-height: 1.8;
+            max-height: 400px;
+            overflow-y: auto;
         }
         
         .recording-status {
@@ -224,12 +232,6 @@
             0% { opacity: 1; }
             50% { opacity: 0.3; }
             100% { opacity: 1; }
-        }
-        
-        .button-group {
-            display: flex;
-            gap: 12px;
-            margin-top: 24px;
         }
         
         .progress-container {
@@ -263,11 +265,14 @@
     <header>
         <h1 class="header-title">CXI Reading Assessment</h1>
         <div class="header-controls">
-            <button id="homeBtn">
+            <div class="header-timer">
+                Time: <span id="headerCountdown">60</span>s
+            </div>
+            <button id="downloadHeaderBtn">
                 <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
                 </svg>
-                Home
+                Download
             </button>
             <button id="stopRecordingHeaderBtn">
                 <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -275,6 +280,12 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"></path>
                 </svg>
                 Stop
+            </button>
+            <button id="homeBtn">
+                <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                </svg>
+                Home
             </button>
         </div>
     </header>
@@ -358,6 +369,9 @@
         const startRecordingBtn = document.getElementById('startRecordingBtn');
         const homeBtn = document.getElementById('homeBtn');
         const stopRecordingHeaderBtn = document.getElementById('stopRecordingHeaderBtn');
+        const downloadHeaderBtn = document.getElementById('downloadHeaderBtn');
+        const headerCountdown = document.getElementById('headerCountdown');
+        const headerTimer = document.querySelector('.header-timer');
         const userNameInput = document.getElementById('userName');
         const countdownElement = document.getElementById('countdown');
         const recordingResult = document.getElementById('recordingResult');
@@ -371,6 +385,16 @@
         let countdown;
         let timeLeft = 60;
         const totalTime = 60;
+        let audioBlob = null;
+
+        // Helper function to format date as YYYY-MM-DD
+        function getFormattedDate() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
 
         // Navigation
         nextToNameBtn.addEventListener('click', () => {
@@ -378,6 +402,8 @@
             namePage.classList.add('active');
             homeBtn.style.display = 'flex';
             stopRecordingHeaderBtn.style.display = 'none';
+            headerTimer.style.display = 'none';
+            downloadHeaderBtn.style.display = 'none';
         });
 
         startRecordingBtn.addEventListener('click', () => {
@@ -390,11 +416,13 @@
             recordingPage.classList.add('active');
             homeBtn.style.display = 'flex';
             stopRecordingHeaderBtn.style.display = 'flex';
+            headerTimer.style.display = 'flex';
+            downloadHeaderBtn.style.display = 'none';
             
             setTimeout(startRecording, 500);
         });
 
-        // Stop recording button (both header and page versions)
+        // Stop recording button
         function stopRecording() {
             if (mediaRecorder && mediaRecorder.state === 'recording') {
                 mediaRecorder.stop();
@@ -407,6 +435,22 @@
         }
         
         stopRecordingHeaderBtn.addEventListener('click', stopRecording);
+
+        // Download button
+        downloadHeaderBtn.addEventListener('click', () => {
+            if (audioBlob) {
+                const formattedDate = getFormattedDate();
+                const fileName = `${userNameInput.value.trim().replace(/\s+/g, '_')}_${formattedDate}.wav`;
+                const url = URL.createObjectURL(audioBlob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+        });
 
         // Home button functionality
         homeBtn.addEventListener('click', () => {
@@ -427,6 +471,8 @@
             // Hide control buttons
             homeBtn.style.display = 'none';
             stopRecordingHeaderBtn.style.display = 'none';
+            headerTimer.style.display = 'none';
+            downloadHeaderBtn.style.display = 'none';
             
             // Reset form
             userNameInput.value = '';
@@ -437,7 +483,9 @@
             document.querySelector('.recording-indicator').style.backgroundColor = 'var(--secondary)';
             recordingResult.style.display = 'none';
             countdownElement.textContent = '60';
+            headerCountdown.textContent = '60';
             progressBar.style.width = '0%';
+            audioBlob = null;
         });
 
         // Recording functions
@@ -446,9 +494,11 @@
                 audioChunks = []; // Reset chunks
                 timeLeft = totalTime; // Reset timer
                 countdownElement.textContent = timeLeft;
+                headerCountdown.textContent = timeLeft;
                 progressBar.style.width = '0%';
                 recordingResult.style.display = 'none';
                 downloadLink.style.display = 'none';
+                downloadHeaderBtn.style.display = 'none';
                 
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                 mediaRecorder = new MediaRecorder(stream);
@@ -458,10 +508,11 @@
                 };
                 
                 mediaRecorder.onstop = () => {
-                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
                     saveRecording(audioBlob);
                     stream.getTracks().forEach(track => track.stop());
                     stopRecordingHeaderBtn.style.display = 'none';
+                    downloadHeaderBtn.style.display = 'flex';
                 };
                 
                 mediaRecorder.start();
@@ -471,6 +522,7 @@
                 recordingResult.style.display = 'block';
                 console.error('Recording error:', error);
                 stopRecordingHeaderBtn.style.display = 'none';
+                headerTimer.style.display = 'none';
             }
         }
 
@@ -478,6 +530,7 @@
             countdown = setInterval(() => {
                 timeLeft--;
                 countdownElement.textContent = timeLeft;
+                headerCountdown.textContent = timeLeft;
                 
                 // Update progress bar
                 const progressPercentage = ((totalTime - timeLeft) / totalTime) * 100;
@@ -494,22 +547,20 @@
             }, 1000);
         }
 
-        function saveRecording(audioBlob) {
-            const fileName = `${userNameInput.value.trim().replace(/\s+/g, '_')}_${new Date().toISOString().slice(0, 19)}.wav`;
+        function saveRecording(blob) {
+            const formattedDate = getFormattedDate();
+            const fileName = `${userNameInput.value.trim().replace(/\s+/g, '_')}_${formattedDate}.wav`;
             
             // For demo purposes, create a download link
-            const audioUrl = URL.createObjectURL(audioBlob);
+            const audioUrl = URL.createObjectURL(blob);
             downloadLink.href = audioUrl;
             downloadLink.download = fileName;
+            downloadLink.textContent = `Download ${fileName}`;
             
             recordingResult.style.display = 'block';
             downloadLink.style.display = 'inline';
             
-            console.log('Simulated upload to Google Drive:', {
-                fileName: fileName,
-                size: (audioBlob.size / 1024 / 1024).toFixed(2) + ' MB',
-                type: audioBlob.type
-            });
+            console.log('File saved as:', fileName);
         }
     </script>
 </body>

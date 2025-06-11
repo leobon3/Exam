@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CXI Reading Assessment</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #f72585;
+            --dark: #212529;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --success: #4cc9f0;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f7ff;
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 80px 20px 20px; /* Added top padding for fixed header */
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+        
+        .page {
+            display: none;
+            padding: 40px;
+        }
+        
+        .active {
+            display: block;
+        }
+        
+        /* Fixed Header Styles */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 15px 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header-title {
+            color: var(--primary);
+            font-size: 20px;
+            margin: 0;
+            font-weight: 600;
+        }
+        
+        .header-controls {
+            display: flex;
+            gap: 10px;
+        }
+        
+        #homeBtn, #stopRecordingHeaderBtn {
+            display: none;
+            align-items: center;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+        }
+        
+        #homeBtn {
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+        }
+        
+        #homeBtn:hover {
+            background-color: rgba(67, 97, 238, 0.2);
+        }
+        
+        #stopRecordingHeaderBtn {
+            background-color: rgba(247, 37, 133, 0.1);
+            color: var(--secondary);
+        }
+        
+        #stopRecordingHeaderBtn:hover {
+            background-color: rgba(247, 37, 133, 0.2);
+        }
+        
+        .icon {
+            width: 16px;
+            height: 16px;
+            margin-right: 6px;
+        }
+        
+        /* Rest of your existing styles... */
+        h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            color: var(--primary);
+        }
+        
+        p {
+            margin-bottom: 16px;
+            color: var(--gray);
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .btn-danger {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        .btn:disabled {
+            background-color: #e9ecef;
+            color: #adb5bd;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .input-group {
+            margin-bottom: 24px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border 0.3s ease;
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+        
+        #textToRead {
+            background-color: #f8f9fa;
+            padding: 24px;
+            border-radius: 12px;
+            margin: 24px 0;
+            border-left: 4px solid var(--primary);
+            font-size: 18px;
+            line-height: 1.8;
+        }
+        
+        .recording-status {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 24px 0;
+            padding: 16px;
+            background-color: #fff5f5;
+            border-radius: 8px;
+            border-left: 4px solid var(--secondary);
+        }
+        
+        .recording-indicator {
+            width: 12px;
+            height: 12px;
+            background-color: var(--secondary);
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+        
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+            margin: 16px 0;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background-color: var(--success);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .result-message {
+            padding: 16px;
+            background-color: #edf7ff;
+            border-radius: 8px;
+            margin-top: 24px;
+            border-left: 4px solid var(--success);
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Fixed Header -->
+    <header>
+        <h1 class="header-title">CXI Reading Assessment</h1>
+        <div class="header-controls">
+            <button id="homeBtn">
+                <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                </svg>
+                Home
+            </button>
+            <button id="stopRecordingHeaderBtn">
+                <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"></path>
+                </svg>
+                Stop
+            </button>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Instruction Page -->
+        <div id="instructionPage" class="page active">
+            <h1>CXI Reading Assessment</h1>
+            <p>Welcome to the English reading assessment. This test will evaluate your pronunciation and reading fluency.</p>
+            <p><strong>Instructions:</strong></p>
+            <ul style="margin-left: 20px; margin-bottom: 24px;">
+                <li>You'll be asked to read a short English text</li>
+                <li>The system will record your voice for 1 minute</li>
+                <li>Find a quiet environment before starting</li>
+                <li>Speak clearly at a natural pace</li>
+            </ul>
+            <button id="nextToNameBtn" class="btn btn-primary">
+                <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+                Continue
+            </button>
+        </div>
+
+        <!-- Name Input Page -->
+        <div id="namePage" class="page">
+            <h1>Your Information</h1>
+            <div class="input-group">
+                <label for="userName">Full Name</label>
+                <input type="text" id="userName" placeholder="Enter your full name" required>
+            </div>
+            <button id="startRecordingBtn" class="btn btn-primary">
+                <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                </svg>
+                Start Recording
+            </button>
+        </div>
+
+        <!-- Recording Page -->
+        <div id="recordingPage" class="page">
+            <h1>CXI Reading Assessment</h1>
+            <p>Please read the following text aloud:</p>
+            <div id="textToRead">
+                <h3>The Brave Traveler's Busy Wednesday</h3>
+                <p>Bobby, the brave traveler from Brisbane, found himself on a bustling Wednesday morning at the busy bus station. His vibrant blue backpack bulged with books, bananas, and bottles of fizzy beverages.</p>
+                <p>"Fascinating!" Bobby murmured, observing the swift zebra-striped buses zipping by. The first vehicle's brakes screeched fiercely as it stopped before the bronze statue of Sir Frederick, the founder of this transportation system.</p>
+                <p>Bobby boarded briskly, finding a seat between a bearded botanist studying fibrous ferns and a nervous violinist practicing vibrato. The bus's ventilation system buzzed softly as it traveled through the business district's forest of reflective skyscrapers.</p>
+                <p>Outside, vendors sold fresh bagels with savory fillings while traffic officers blew whistles, directing streams of vehicles. Bobby noticed a bookstore's bright banner: "Bestsellers by Favorite Authors!" His fingers twitched to browse, but the bus was already zooming past.</p>
+                <p>At the fifth stop, a group of boisterous students boarded, discussing their robotics project. "Our servo mechanism needs better stabilization," argued one, adjusting his glasses. The bus driver, a veteran named Mr. Schwartz, announced the next destination in a gravelly baritone.</p>
+                <p>Suddenly, the brakes squealed violently—a stray tabby cat had dashed across the street! The vehicle halted with a shudder, sending Bobby's belongings tumbling. "Blast!" he exclaimed, scrambling to recover his scattered items.</p>
+                <p>As the journey resumed, Bobby reflected on Brisbane's beautiful riverside, visible between buildings. The sun's rays filtered through the glass facades, creating dazzling reflections on his tablet screen.</p>
+                <p>When his stop finally arrived, Bobby disembarked with renewed zest, ready for his important business meeting at the Frost & Brothers textile firm. "What a vibrant, fast-paced morning," he thought, straightening his striped tie before striding forward.</p>
+            </div>
+            
+            <div class="recording-status">
+                <div class="recording-indicator"></div>
+                <div>
+                    <p id="recordingStatusText">Recording in progress</p>
+                    <p>Time remaining: <span id="countdown">60</span> seconds</p>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div id="progressBar" class="progress-bar"></div>
+            </div>
+            
+            <div id="recordingResult" class="result-message">
+                <p>Recording complete! Your audio has been saved.</p>
+                <a id="downloadLink" href="#" style="display: none;">Download your recording</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM elements
+        const instructionPage = document.getElementById('instructionPage');
+        const namePage = document.getElementById('namePage');
+        const recordingPage = document.getElementById('recordingPage');
+        const nextToNameBtn = document.getElementById('nextToNameBtn');
+        const startRecordingBtn = document.getElementById('startRecordingBtn');
+        const homeBtn = document.getElementById('homeBtn');
+        const stopRecordingHeaderBtn = document.getElementById('stopRecordingHeaderBtn');
+        const userNameInput = document.getElementById('userName');
+        const countdownElement = document.getElementById('countdown');
+        const recordingResult = document.getElementById('recordingResult');
+        const progressBar = document.getElementById('progressBar');
+        const recordingStatusText = document.getElementById('recordingStatusText');
+        const downloadLink = document.getElementById('downloadLink');
+
+        // Variables
+        let mediaRecorder;
+        let audioChunks = [];
+        let countdown;
+        let timeLeft = 60;
+        const totalTime = 60;
+
+        // Navigation
+        nextToNameBtn.addEventListener('click', () => {
+            instructionPage.classList.remove('active');
+            namePage.classList.add('active');
+            homeBtn.style.display = 'flex';
+            stopRecordingHeaderBtn.style.display = 'none';
+        });
+
+        startRecordingBtn.addEventListener('click', () => {
+            if (!userNameInput.value.trim()) {
+                alert('Please enter your name');
+                return;
+            }
+            
+            namePage.classList.remove('active');
+            recordingPage.classList.add('active');
+            homeBtn.style.display = 'flex';
+            stopRecordingHeaderBtn.style.display = 'flex';
+            
+            setTimeout(startRecording, 500);
+        });
+
+        // Stop recording button (both header and page versions)
+        function stopRecording() {
+            if (mediaRecorder && mediaRecorder.state === 'recording') {
+                mediaRecorder.stop();
+                clearInterval(countdown);
+                recordingStatusText.textContent = 'Recording stopped';
+                document.querySelector('.recording-indicator').style.animation = 'none';
+                document.querySelector('.recording-indicator').style.backgroundColor = '#6c757d';
+                stopRecordingHeaderBtn.style.display = 'none';
+            }
+        }
+        
+        stopRecordingHeaderBtn.addEventListener('click', stopRecording);
+
+        // Home button functionality
+        homeBtn.addEventListener('click', () => {
+            // Stop any ongoing recording
+            if (mediaRecorder && mediaRecorder.state === 'recording') {
+                mediaRecorder.stop();
+                clearInterval(countdown);
+            }
+            
+            // Reset all pages
+            instructionPage.classList.remove('active');
+            namePage.classList.remove('active');
+            recordingPage.classList.remove('active');
+            
+            // Show instruction page
+            instructionPage.classList.add('active');
+            
+            // Hide control buttons
+            homeBtn.style.display = 'none';
+            stopRecordingHeaderBtn.style.display = 'none';
+            
+            // Reset form
+            userNameInput.value = '';
+            
+            // Reset recording UI
+            recordingStatusText.textContent = 'Recording in progress';
+            document.querySelector('.recording-indicator').style.animation = 'pulse 1.5s infinite';
+            document.querySelector('.recording-indicator').style.backgroundColor = 'var(--secondary)';
+            recordingResult.style.display = 'none';
+            countdownElement.textContent = '60';
+            progressBar.style.width = '0%';
+        });
+
+        // Recording functions
+        async function startRecording() {
+            try {
+                audioChunks = []; // Reset chunks
+                timeLeft = totalTime; // Reset timer
+                countdownElement.textContent = timeLeft;
+                progressBar.style.width = '0%';
+                recordingResult.style.display = 'none';
+                downloadLink.style.display = 'none';
+                
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                
+                mediaRecorder.ondataavailable = event => {
+                    audioChunks.push(event.data);
+                };
+                
+                mediaRecorder.onstop = () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    saveRecording(audioBlob);
+                    stream.getTracks().forEach(track => track.stop());
+                    stopRecordingHeaderBtn.style.display = 'none';
+                };
+                
+                mediaRecorder.start();
+                startCountdown();
+            } catch (error) {
+                recordingResult.innerHTML = `<p>Error: ${error.message}</p>`;
+                recordingResult.style.display = 'block';
+                console.error('Recording error:', error);
+                stopRecordingHeaderBtn.style.display = 'none';
+            }
+        }
+
+        function startCountdown() {
+            countdown = setInterval(() => {
+                timeLeft--;
+                countdownElement.textContent = timeLeft;
+                
+                // Update progress bar
+                const progressPercentage = ((totalTime - timeLeft) / totalTime) * 100;
+                progressBar.style.width = `${progressPercentage}%`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    mediaRecorder.stop();
+                    recordingStatusText.textContent = 'Recording completed';
+                    document.querySelector('.recording-indicator').style.animation = 'none';
+                    document.querySelector('.recording-indicator').style.backgroundColor = '#4cc9f0';
+                    stopRecordingHeaderBtn.style.display = 'none';
+                }
+            }, 1000);
+        }
+
+        function saveRecording(audioBlob) {
+            const fileName = `${userNameInput.value.trim().replace(/\s+/g, '_')}_${new Date().toISOString().slice(0, 19)}.wav`;
+            
+            // For demo purposes, create a download link
+            const audioUrl = URL.createObjectURL(audioBlob);
+            downloadLink.href = audioUrl;
+            downloadLink.download = fileName;
+            
+            recordingResult.style.display = 'block';
+            downloadLink.style.display = 'inline';
+            
+            console.log('Simulated upload to Google Drive:', {
+                fileName: fileName,
+                size: (audioBlob.size / 1024 / 1024).toFixed(2) + ' MB',
+                type: audioBlob.type
+            });
+        }
+    </script>
+</body>
+</html>

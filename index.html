@@ -165,6 +165,12 @@
             margin-bottom: 25px;
             color: var(--dark);
         }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
         
         /* Rest of your existing styles... */
         h1 {
@@ -244,7 +250,7 @@
             box-shadow: 0 0 0 3px rgba(238, 39, 39, 0.2); /* Changed from rgba(67, 97, 238, 0.2) */
         }
         
-        #textToRead {
+        #textToRead, #textToRead2 {
             background-color: #f8f9fa;
             padding: 24px;
             border-radius: 12px;
@@ -359,13 +365,21 @@
     <div id="completionModal" class="modal">
         <div class="modal-content">
             <h2>Assessment Complete</h2>
-            <p>The assessment is done. Thank you for participating!</p>
-            <button id="modalHomeBtn" class="btn btn-primary">
-                <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
-                </svg>
-                Return Home
-            </button>
+            <p id="modalMessage">The assessment is done. Thank you for participating!</p>
+            <div class="modal-buttons">
+                <button id="modalNextBtn" class="btn btn-primary" style="display: none;">
+                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                    Next
+                </button>
+                <button id="modalHomeBtn" class="btn btn-primary">
+                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                    </svg>
+                    Return Home
+                </button>
+            </div>
         </div>
     </div>
 
@@ -376,8 +390,8 @@
             <p>Welcome to the English reading assessment. This test will evaluate your pronunciation and reading fluency.</p>
             <p><strong>Instructions:</strong></p>
             <ul style="margin-left: 20px; margin-bottom: 24px;">
-                <li>You'll be asked to read a short English paragraph</li>
-                <li>The system will record your voice for 1 minute</li>
+                <li>You'll be asked to read two short English paragraphs</li>
+                <li>The system will record your voice for 1 minute for each reading</li>
                 <li>Make sure to have a quiet environment before starting</li>
                 <li>Speak clearly at a natural pace</li>
                 <li>Press Continue if you are ready, recording will start immediately.</li>
@@ -405,9 +419,9 @@
             </button>
         </div>
 
-        <!-- Recording Page -->
+        <!-- Recording Page 1 -->
         <div id="recordingPage" class="page">
-            <h1>Reading Assessment</h1>
+            <h1>Reading Assessment - Part 1</h1>
             <p>Please read the following text aloud:</p>
             <div id="textToRead">
                 <h3>The Brave Traveler's Busy Wednesday</h3>
@@ -445,6 +459,76 @@
                 </div>
             </div>
         </div>
+
+        <!-- Recording Page 2 -->
+        <div id="recordingPage2" class="page">
+            <h1>Reading Assessment - Part 2</h1>
+            <p>Please read the following call center script aloud:</p>
+            <div id="textToRead2">
+                <h3>Customer Service Representative Script</h3>
+                
+                <p><strong>Opening Greeting:</strong><br>
+                "Good morning, thank you for calling CXI. My name is Sarah. How may I assist you today?"</p>
+                
+                <p><strong>Acknowledging the Issue:</strong><br>
+                "I understand you're calling about your recent service interruption. Let me check that for you right away. May I have your account number please?"</p>
+                
+                <p><strong>Account Verification:</strong><br>
+                "Thank you for providing that information. While I pull up your account, may I have your full name and email address for verification purposes?"</p>
+                
+                <p><strong>Explaining the Situation:</strong><br>
+                "I appreciate your patience. I can see here that your service was temporarily suspended due to a billing issue. To resolve this, I'll need to process a payment and schedule a technician visit. This process typically takes about 2 business days. Would that be acceptable?"</p>
+                
+                <p><strong>Security Verification:</strong><br>
+                "For security purposes, I'll need to verify some information. Could you please confirm the last 4 digits of your Social Security number?"</p>
+                
+                <p><strong>Processing Request:</strong><br>
+                "Thank you for that information. I'm currently processing your payment and checking technician availability. Please bear with me for just a moment."</p>
+                
+                <p><strong>Resolution Update:</strong><br>
+                "I've completed the payment processing on my end. You should now see service restored within the next hour, and our technician will visit tomorrow between 1-4pm. Is there anything else I can assist you with today?"</p>
+                
+                <p><strong>Call Summary:</strong><br>
+                "Before we conclude, I'd like to summarize what we've accomplished today: We've processed your payment, restored your service, and scheduled a technician visit for tomorrow afternoon. Do you have any other questions about this before I let you go?"</p>
+                
+                <p><strong>Closing the Call:</strong><br>
+                "Thank you for calling CXI. It's been a pleasure assisting you today. Have a wonderful evening!"</p>
+                
+                <p><strong>Transferring a Call:</strong><br>
+                "Let me connect you with our technical support team who can better assist you with this equipment issue. Please hold while I transfer your call."</p>
+                
+                <p><strong>Escalating a Call:</strong><br>
+                "I completely understand your concern about this billing discrepancy. Let me connect you with my supervisor who can further assist you. May I place you on a brief hold while I get them on the line?"</p>
+                
+                <p><strong>Handling Difficult Calls:</strong><br>
+                "I apologize for the inconvenience you've experienced with our service. I've documented all the details of this call, and our customer relations team will follow up with you within 24 hours regarding this matter."</p>
+            </div>
+                    
+            <div class="recording-status">
+                <div class="recording-indicator"></div>
+                <div>
+                    <p id="recordingStatusText2">Recording in progress</p>
+                    <p>Time remaining: <span id="countdown2">60</span> seconds</p>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div id="progressBar2" class="progress-bar"></div>
+            </div>
+            
+            <div id="recordingResult2" class="result-message">
+                <p>Recording complete! Your audio has been saved.</p>
+                <div class="home-button-container">
+                    <button id="bottomHomeBtn2" class="btn btn-primary">
+                        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                        </svg>
+                        Return Home
+                    </button>
+                </div>
+            </div>
+        </div>
+        
     </div>
 
     <script>
@@ -452,6 +536,7 @@
         const instructionPage = document.getElementById('instructionPage');
         const namePage = document.getElementById('namePage');
         const recordingPage = document.getElementById('recordingPage');
+        const recordingPage2 = document.getElementById('recordingPage2');
         const nextToNameBtn = document.getElementById('nextToNameBtn');
         const startRecordingBtn = document.getElementById('startRecordingBtn');
         const homeBtn = document.getElementById('homeBtn');
@@ -460,12 +545,19 @@
         const headerTimer = document.querySelector('.header-timer');
         const userNameInput = document.getElementById('userName');
         const countdownElement = document.getElementById('countdown');
+        const countdownElement2 = document.getElementById('countdown2');
         const recordingResult = document.getElementById('recordingResult');
+        const recordingResult2 = document.getElementById('recordingResult2');
         const progressBar = document.getElementById('progressBar');
+        const progressBar2 = document.getElementById('progressBar2');
         const recordingStatusText = document.getElementById('recordingStatusText');
+        const recordingStatusText2 = document.getElementById('recordingStatusText2');
         const completionModal = document.getElementById('completionModal');
         const modalHomeBtn = document.getElementById('modalHomeBtn');
+        const modalNextBtn = document.getElementById('modalNextBtn');
+        const modalMessage = document.getElementById('modalMessage');
         const bottomHomeBtn = document.getElementById('bottomHomeBtn');
+        const bottomHomeBtn2 = document.getElementById('bottomHomeBtn2');
 
         // Variables
         let mediaRecorder;
@@ -474,6 +566,8 @@
         let timeLeft = 60;
         const totalTime = 60;
         let audioBlob = null;
+        let currentRecordingPage = 1;
+        let wasStoppedManually = false;
 
         // Helper function to format date as YYYY-MM-DD
         function getFormattedDate() {
@@ -486,19 +580,64 @@
 
         // Function to download audio automatically
         function downloadAudio(blob) {
-            const formattedDate = getFormattedDate();
-            const fileName = `${userNameInput.value.trim().replace(/\s+/g, '_')}_${formattedDate}.wav`;
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = fileName;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+        const formattedDate = getFormattedDate();
+        const pageSuffix = currentRecordingPage === 1 ? '_Part1' : '_Part2';
+        const fileName = `${userNameInput.value.trim().replace(/\s+/g, '_')}_${formattedDate}${pageSuffix}.wav`;
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        // Show completion modal with appropriate buttons
+        completionModal.style.display = 'flex';
+        
+        if (currentRecordingPage === 1) {
+            modalNextBtn.style.display = 'flex';
+            modalHomeBtn.style.display = 'none';
+            modalMessage.textContent = wasStoppedManually 
+                ? "Recording stopped. Would you like to continue to the next part?"
+                : "First part complete! Ready for the second part?";
+        } else {
+            modalNextBtn.style.display = 'none';
+            modalHomeBtn.style.display = 'flex';
+            modalMessage.textContent = "Assessment complete! Thank you for participating!";
+        }
+        wasStoppedManually = false; // Reset the flag
+    }
+
+        // Stop recording button
+    function stopRecording() {
+        if (mediaRecorder && mediaRecorder.state === 'recording') {
+            wasStoppedManually = true;
+            mediaRecorder.stop();
+            clearInterval(countdown);
             
-            // Show completion modal
-            completionModal.style.display = 'flex';
+            if (currentRecordingPage === 1) {
+                recordingStatusText.textContent = 'Recording stopped';
+                document.querySelector('#recordingPage .recording-indicator').style.animation = 'none';
+                document.querySelector('#recordingPage .recording-indicator').style.backgroundColor = '#6c757d';
+            } else {
+                recordingStatusText2.textContent = 'Recording stopped';
+                document.querySelector('#recordingPage2 .recording-indicator').style.animation = 'none';
+                document.querySelector('#recordingPage2 .recording-indicator').style.backgroundColor = '#6c757d';
+            }
+            
+            stopRecordingHeaderBtn.style.display = 'none';
+        }
+    }
+
+
+        function returnHome() {
+            // Stop any ongoing recording
+            if (mediaRecorder && mediaRecorder.state === 'recording') {
+                mediaRecorder.stop();
+                clearInterval(countdown);
+            }
+            window.location.href = 'home.html';
         }
 
         // Navigation
@@ -530,70 +669,108 @@
             if (mediaRecorder && mediaRecorder.state === 'recording') {
                 mediaRecorder.stop();
                 clearInterval(countdown);
-                recordingStatusText.textContent = 'Recording stopped';
-                document.querySelector('.recording-indicator').style.animation = 'none';
-                document.querySelector('.recording-indicator').style.backgroundColor = '#6c757d';
+                
+                if (currentRecordingPage === 1) {
+                    recordingStatusText.textContent = 'Recording stopped';
+                    document.querySelector('#recordingPage .recording-indicator').style.animation = 'none';
+                    document.querySelector('#recordingPage .recording-indicator').style.backgroundColor = '#6c757d';
+                } else {
+                    recordingStatusText2.textContent = 'Recording stopped';
+                    document.querySelector('#recordingPage2 .recording-indicator').style.animation = 'none';
+                    document.querySelector('#recordingPage2 .recording-indicator').style.backgroundColor = '#6c757d';
+                }
+                
                 stopRecordingHeaderBtn.style.display = 'none';
             }
         }
         
         stopRecordingHeaderBtn.addEventListener('click', stopRecording);
 
-        // Home button functionality
+        // Home button functionality - redirects to home.html
         function returnHome() {
-        // Stop any ongoing recording
-        if (mediaRecorder && mediaRecorder.state === 'recording') {
-            mediaRecorder.stop();
-            clearInterval(countdown);
+            // Stop any ongoing recording
+            if (mediaRecorder && mediaRecorder.state === 'recording') {
+                mediaRecorder.stop();
+                clearInterval(countdown);
+            }
+            
+            // Redirect to home.html
+            window.location.href = 'home.html';
         }
-        
-        // Redirect to index.html
-        window.location.href = 'home.html';
-    }
-            
-            // Hide modal if open
-            completionModal.style.display = 'none';
-            
-            // Reset all pages
-            instructionPage.classList.remove('active');
-            namePage.classList.remove('active');
-            recordingPage.classList.remove('active');
-            
-            // Show instruction page
-            instructionPage.classList.add('active');
-            
-            // Hide control buttons
-            homeBtn.style.display = 'none';
-            stopRecordingHeaderBtn.style.display = 'none';
-            headerTimer.style.display = 'none';
-            
-            // Reset form
-            userNameInput.value = '';
-            
-            // Reset recording UI
-            recordingStatusText.textContent = 'Recording in progress';
-            document.querySelector('.recording-indicator').style.animation = 'pulse 1.5s infinite';
-            document.querySelector('.recording-indicator').style.backgroundColor = 'var(--secondary)';
-            recordingResult.style.display = 'none';
-            countdownElement.textContent = '60';
-            headerCountdown.textContent = '60';
-            progressBar.style.width = '0%';
-            audioBlob = null;
-        
         
         homeBtn.addEventListener('click', returnHome);
         modalHomeBtn.addEventListener('click', returnHome);
         bottomHomeBtn.addEventListener('click', returnHome);
+        bottomHomeBtn2.addEventListener('click', returnHome);
+
+        // Next button to go to second recording page
+        modalNextBtn.addEventListener('click', () => {
+            completionModal.style.display = 'none';
+            
+            // Hide all pages first
+            instructionPage.classList.remove('active');
+            namePage.classList.remove('active');
+            recordingPage.classList.remove('active');
+            recordingPage2.classList.remove('active');
+            
+            // Show the second recording page
+            recordingPage2.classList.add('active');
+            currentRecordingPage = 2;
+            
+            // Reset UI for page 2
+            resetRecordingUI(2);
+            
+            // Show controls
+            homeBtn.style.display = 'flex';
+            stopRecordingHeaderBtn.style.display = 'flex';
+            headerTimer.style.display = 'flex';
+            
+            // Start recording for page 2
+            setTimeout(startRecording, 500);
+        });
+
+        function resetRecordingUI(pageNumber) {
+        if (pageNumber === 1) {
+            recordingStatusText.textContent = 'Recording in progress';
+            document.querySelector('#recordingPage .recording-indicator').style.animation = 'pulse 1.5s infinite';
+            document.querySelector('#recordingPage .recording-indicator').style.backgroundColor = 'var(--secondary)';
+            recordingResult.style.display = 'none';
+            countdownElement.textContent = '60';
+            progressBar.style.width = '0%';
+        } else {
+            recordingStatusText2.textContent = 'Recording in progress';
+            document.querySelector('#recordingPage2 .recording-indicator').style.animation = 'pulse 1.5s infinite';
+            document.querySelector('#recordingPage2 .recording-indicator').style.backgroundColor = 'var(--secondary)';
+            recordingResult2.style.display = 'none';
+            countdownElement2.textContent = '60';
+            progressBar2.style.width = '0%';
+        }
+        headerCountdown.textContent = '60';
+        timeLeft = totalTime;
+        audioBlob = null;
+    }
 
         // Recording functions
         async function startRecording() {
             try {
                 audioChunks = []; // Reset chunks
                 timeLeft = totalTime; // Reset timer
-                countdownElement.textContent = timeLeft;
+                
+                if (currentRecordingPage === 1) {
+                    countdownElement.textContent = timeLeft;
+                } else {
+                    countdownElement2.textContent = timeLeft;
+                }
+                
                 headerCountdown.textContent = timeLeft;
-                progressBar.style.width = '0%';
-                recordingResult.style.display = 'none';
+                
+                if (currentRecordingPage === 1) {
+                    progressBar.style.width = '0%';
+                    recordingResult.style.display = 'none';
+                } else {
+                    progressBar2.style.width = '0%';
+                    recordingResult2.style.display = 'none';
+                }
                 
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                 mediaRecorder = new MediaRecorder(stream);
@@ -609,14 +786,23 @@
                     stopRecordingHeaderBtn.style.display = 'none';
                     
                     // Show result section
-                    recordingResult.style.display = 'block';
+                    if (currentRecordingPage === 1) {
+                        recordingResult.style.display = 'block';
+                    } else {
+                        recordingResult2.style.display = 'block';
+                    }
                 };
                 
                 mediaRecorder.start();
                 startCountdown();
             } catch (error) {
-                recordingResult.innerHTML = `<p>Error: ${error.message}</p>`;
-                recordingResult.style.display = 'block';
+                if (currentRecordingPage === 1) {
+                    recordingResult.innerHTML = `<p>Error: ${error.message}</p>`;
+                    recordingResult.style.display = 'block';
+                } else {
+                    recordingResult2.innerHTML = `<p>Error: ${error.message}</p>`;
+                    recordingResult2.style.display = 'block';
+                }
                 console.error('Recording error:', error);
                 stopRecordingHeaderBtn.style.display = 'none';
                 headerTimer.style.display = 'none';
@@ -626,19 +812,38 @@
         function startCountdown() {
             countdown = setInterval(() => {
                 timeLeft--;
-                countdownElement.textContent = timeLeft;
+                
+                if (currentRecordingPage === 1) {
+                    countdownElement.textContent = timeLeft;
+                } else {
+                    countdownElement2.textContent = timeLeft;
+                }
+                
                 headerCountdown.textContent = timeLeft;
                 
                 // Update progress bar
                 const progressPercentage = ((totalTime - timeLeft) / totalTime) * 100;
-                progressBar.style.width = `${progressPercentage}%`;
+                
+                if (currentRecordingPage === 1) {
+                    progressBar.style.width = `${progressPercentage}%`;
+                } else {
+                    progressBar2.style.width = `${progressPercentage}%`;
+                }
                 
                 if (timeLeft <= 0) {
                     clearInterval(countdown);
                     mediaRecorder.stop();
-                    recordingStatusText.textContent = 'Recording completed';
-                    document.querySelector('.recording-indicator').style.animation = 'none';
-                    document.querySelector('.recording-indicator').style.backgroundColor = '#4cc9f0';
+                    
+                    if (currentRecordingPage === 1) {
+                        recordingStatusText.textContent = 'Recording completed';
+                        document.querySelector('#recordingPage .recording-indicator').style.animation = 'none';
+                        document.querySelector('#recordingPage .recording-indicator').style.backgroundColor = '#4cc9f0';
+                    } else {
+                        recordingStatusText2.textContent = 'Recording completed';
+                        document.querySelector('#recordingPage2 .recording-indicator').style.animation = 'none';
+                        document.querySelector('#recordingPage2 .recording-indicator').style.backgroundColor = '#4cc9f0';
+                    }
+                    
                     stopRecordingHeaderBtn.style.display = 'none';
                 }
             }, 1000);
